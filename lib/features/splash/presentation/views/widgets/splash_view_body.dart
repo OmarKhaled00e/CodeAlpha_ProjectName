@@ -6,7 +6,6 @@ import 'package:x/core/utils/app_images.dart';
 import 'package:x/features/auth/presentation/views/login_view.dart';
 import 'package:x/features/on_boarding/presentation/views/on_boarding_view.dart';
 
-
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
 
@@ -38,13 +37,14 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   }
 
   void excuteNavigation() {
-    bool isOnBoardingViewSeen =Prefs.instance.getBool(kIsOnBoardingViewSeen ); // Replace with your logic to check if the user has seen the onboarding view
+    // bool isOnBoardingViewSeen = Prefs.getBool(
+    //   kIsOnBoardingViewSeen,
+    // ); // Replace with your logic to check if the user has seen the onboarding view
     Future.delayed(const Duration(seconds: 3), () {
-      if (isOnBoardingViewSeen) {
-        Navigator.pushReplacementNamed(context, LoginView.routeName);
-      } else {
-        Navigator.pushReplacementNamed(context, OnBoardingView.routeName);
-      }
+      // if (isOnBoardingViewSeen) {
+      //   Navigator.pushReplacementNamed(context, LoginView.routeName);
+      // } else {
+      Navigator.pushReplacementNamed(context, OnBoardingView.routeName);
     });
   }
 }

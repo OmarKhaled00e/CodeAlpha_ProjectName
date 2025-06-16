@@ -24,7 +24,7 @@ class AuthRepoIml extends AuthRepo {
     } on CustomExceptions catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('حدث خطأ ما الرجاء المحوله مره اخري'));
     }
   }
 }

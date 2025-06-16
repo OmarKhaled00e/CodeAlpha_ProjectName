@@ -1,10 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+
 class Prefs {
   static final Prefs _instance = Prefs._internal();
   SharedPreferences? _prefs;
-
-  static var instance;
 
   factory Prefs() {
     return _instance;
@@ -23,16 +23,11 @@ class Prefs {
     return _prefs!;
   }
 
-  // Example helper methods
-  Future<bool> setString(String key, String value) async {
-    return await prefs.setString(key, value);
+  static setBool(String key, bool bool) {
+    return _instance.prefs.setBool(key, true);
   }
 
-  String? getString(String key) {
-    return prefs.getString(key);
-  }
-
-  bool? getBool(String key, [bool? bool]) {
-    return prefs.getBool(key) ?? false;
+  static bool getBool(String key) {
+    return _instance.prefs.getBool(key) ?? false;
   }
 }
