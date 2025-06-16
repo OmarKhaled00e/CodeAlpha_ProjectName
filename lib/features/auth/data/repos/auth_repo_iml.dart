@@ -46,4 +46,34 @@ class AuthRepoIml extends AuthRepo {
       return Left(ServerFailure('حدث خطأ ما الرجاء المحوله مره اخري'));
     }
   }
+  
+  @override
+  Future<Either<Failures, UserEntity>> signInWithGoogle() async {
+    try {
+      var user = await firebaseAuthService.signInWithGoogle();
+      return right(UserModel.fromFirebaseUser(user));
+    } on CustomExceptions catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      log('Exsption in signInWithGoogle: ${e.toString()}');
+      return Left(ServerFailure('حدث خطأ ما الرجاء المحوله مره اخري'));
+    }
+    
+    
+  }
+  
+  @override
+  Future<Either<Failures, UserEntity>> singInWithFacebooK() {
+    try{
+      var user = await FirebaseAuthService.signInWithFacebook();
+      return right(UserModel.fromFirebaseUser(user),);
+
+    } catch (e){
+      log('Expcption in AuthRepo. createUserWithEmailAndPrassword: ${e.toString} ');
+      return left(ServerFaulure('حدث خطأ ما الرجاء المحاولة مؤة اخري'))
+      
+    }   
+  }
+
+  
 }
