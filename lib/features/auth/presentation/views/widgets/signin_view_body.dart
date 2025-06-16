@@ -61,20 +61,22 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                 ],
               ),
               SizedBox(height: 33),
-              CustomButton(onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-                  context.read<SigninCubit>().signInWithEmailAndPassword(
-                    email: email,
-                    password: password,
-                  );  
-                  // Call the sign-in function here
-                } else {
-                  autovalidateMode = AutovalidateMode.always;
-                  setState(() {});
-                }
-              }
-              , text: 'تسجيل دخول'),
+              CustomButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    context.read<SigninCubit>().signInWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+                    // Call the sign-in function here
+                  } else {
+                    autovalidateMode = AutovalidateMode.always;
+                    setState(() {});
+                  }
+                },
+                text: 'تسجيل دخول',
+              ),
               SizedBox(height: 33),
               DontHaveAnAccountwidget(),
               SizedBox(height: 33),
@@ -93,11 +95,14 @@ class _SigninViewBodyState extends State<SigninViewBody> {
                 title: 'تسجيل بواسطة أبل',
                 onPressed: () {},
               ),
+
               SizedBox(height: 16),
               SocialLoginButton(
                 image: Assets.imagesFacebookIcon,
                 title: 'تسجيل بواسطة فيسبوك',
-                onPressed: () {},
+                onPressed: () {
+                  context.read<SigninCubit>().signInWithFacebook();
+                },
               ),
             ],
           ),

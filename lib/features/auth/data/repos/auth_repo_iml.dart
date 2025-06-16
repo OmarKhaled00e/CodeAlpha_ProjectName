@@ -63,7 +63,7 @@ class AuthRepoIml extends AuthRepo {
   }
   
   @override
-  Future<Either<Failures, UserEntity>> singInWithFacebooK() {
+  Future<Either<Failures, UserEntity>> singInWithFacebooK() async{
     try{
       var user = await FirebaseAuthService.signInWithFacebook();
       return right(UserModel.fromFirebaseUser(user),);
