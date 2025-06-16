@@ -5,8 +5,8 @@ import 'package:x/features/auth/presentation/views/widgets/custom_check_box.dart
 
 
 class TremsAndConditionsWidget extends StatefulWidget {
-  const TremsAndConditionsWidget({super.key});
-
+  const TremsAndConditionsWidget({super.key, required this.onChanged});
+  final ValueChanged<bool> onChanged;
   @override
   State<TremsAndConditionsWidget> createState() => _TremsAndConditionsWidgetState();
 }
@@ -20,6 +20,7 @@ class _TremsAndConditionsWidgetState extends State<TremsAndConditionsWidget> {
         CustomCheckBox(
           onChanged: (value){
             isTermsAccepted = value;
+            widget.onChanged(value);
             setState(() {});
           },
           isChecked: isTermsAccepted,
