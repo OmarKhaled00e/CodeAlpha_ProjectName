@@ -14,13 +14,13 @@ class SigninCubit extends Cubit<SigninState> {
     required String password,
   }) async {
     emit(SigninLoading());
-    var result = await authRepo
-        .signInWithEmailAndPassword(email, password);
+    var result = await authRepo.signInWithEmailAndPassword(email, password);
     result.fold(
       (failure) => emit(SigninFailure(message: failure.message)),
       (userEntity) => emit(SigninSuccess(userEntity)),
     );
   }
+
   Future<void> signInWithGoogle() async {
     emit(SigninLoading());
     var result = await authRepo.signInWithGoogle();
@@ -29,12 +29,13 @@ class SigninCubit extends Cubit<SigninState> {
       (userEntity) => emit(SigninSuccess(userEntity)),
     );
   }
+
   Future<void> signInWithFacebook() async {
     emit(SigninLoading());
-    var result = await authRepo.signInWithFacebook();
+    var result = await authRepo.singInWithFacebooK();
     result.fold(
       (failure) => emit(SigninFailure(message: failure.message)),
       (userEntity) => emit(SigninSuccess(userEntity)),
-      
     );
+  }
 }
