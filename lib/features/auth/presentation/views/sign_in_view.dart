@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:x/core/services/get_it_service.dart';
 import 'package:x/core/widgets/custom_app_bar.dart';
-import 'package:x/core/widgets/custom_progress_hud.dart';
 import 'package:x/features/auth/domain/repos/auth_repo.dart';
 import 'package:x/features/auth/presentation/cibits/cubit/signin_cubit.dart';
-import 'package:x/features/auth/presentation/views/widgets/signin_view_body.dart';
 import 'package:x/features/auth/presentation/views/widgets/signin_view_body_bloc_Consumer.dart';
 
 class SigninView extends StatelessWidget {

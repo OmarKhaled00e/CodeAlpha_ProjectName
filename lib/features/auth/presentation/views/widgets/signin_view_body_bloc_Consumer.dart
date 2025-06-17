@@ -4,6 +4,7 @@ import 'package:x/core/helper_functions/build_error_bar.dart';
 import 'package:x/core/widgets/custom_progress_hud.dart';
 import 'package:x/features/auth/presentation/cibits/cubit/signin_cubit.dart';
 import 'package:x/features/auth/presentation/views/widgets/signin_view_body.dart';
+import 'package:x/features/home/presentation/views/home_view.dart';
 
 class SigninViewBodyBlocConsumer extends StatelessWidget {
   const SigninViewBodyBlocConsumer({super.key});
@@ -13,7 +14,7 @@ class SigninViewBodyBlocConsumer extends StatelessWidget {
     return BlocConsumer<SigninCubit, SigninState>(
       listener: (context, state) {
         if (state is SigninSuccess) {
-          // Handle success state, e.g., navigate to home screen
+          Navigator.pushNamed(context, HomeView.routeName);
         }
         if (state is SigninFailure) {
           buildErrorBar(context, state.message);

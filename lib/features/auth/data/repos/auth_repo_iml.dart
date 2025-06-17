@@ -30,21 +30,32 @@ class AuthRepoIml extends AuthRepo {
         email: email,
         password: password,
       );
-      var userEntity = UserModel.fromFirebaseUser(user);
-      await addUserData(user: userEntity);
+      var userEntity = UserEntity(name: name, email: email, uId: user.uid);
+
+      var isUserExist = await databaseService.checkIfDataExists(
+        path: BackendEndpoint.isUserExists,
+        documentId: user.uid,
+      );
+      if (isUserExist) {
+        await getUserData(uid: user.uid);
+      } else {
+        await addUserData(user: userEntity);
+      }
 
       return right(userEntity);
     } on CustomExceptions catch (e) {
-      if (user != null) {
-      await firebaseAuthService.deletUser();
-      }
+      await deletUser(user);
       return Left(ServerFailure(e.message));
     } catch (e) {
-      if (user != null) {
-      await firebaseAuthService.deletUser();
-      }
+      await deletUser(user);
       log('Exsption in createUserWithEmailAndPassword: ${e.toString()}');
       return Left(ServerFailure('حدث خطأ ما الرجاء المحوله مره اخري'));
+    }
+  }
+
+  Future<void> deletUser(User? user) async {
+    if (user != null) {
+      await firebaseAuthService.deletUser();
     }
   }
 
@@ -58,7 +69,18 @@ class AuthRepoIml extends AuthRepo {
         email: email,
         password: password,
       );
-      return right(UserModel.fromFirebaseUser(user));
+      var userEntity = await getUserData(uid: user.uid);
+      var isUserExist = await databaseService.checkIfDataExists(
+        path: BackendEndpoint.isUserExists,
+        documentId: user.uid,
+      );
+      if (isUserExist) {
+        await getUserData(uid: user.uid);
+      } else {
+        await addUserData(user: userEntity);
+      }
+
+      return right(userEntity);
     } on CustomExceptions catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
@@ -69,12 +91,24 @@ class AuthRepoIml extends AuthRepo {
 
   @override
   Future<Either<Failures, UserEntity>> signInWithGoogle() async {
+    User? user;
     try {
-      var user = await firebaseAuthService.signInWithGoogle();
-      return right(UserModel.fromFirebaseUser(user));
-    } on CustomExceptions catch (e) {
-      return Left(ServerFailure(e.message));
+      user = await firebaseAuthService.signInWithGoogle();
+
+      var userEntity = UserModel.fromFirebaseUser(user);
+      var isUserExist = await databaseService.checkIfDataExists(
+        path: BackendEndpoint.isUserExists,
+        documentId: user.uid,
+      );
+      if (isUserExist) {
+        await getUserData(uid: user.uid);
+      } else {
+        await addUserData(user: userEntity);
+      }
+      return right(userEntity);
     } catch (e) {
+      await deletUser(user);
+
       log('Exsption in signInWithGoogle: ${e.toString()}');
       return Left(ServerFailure('حدث خطأ ما الرجاء المحوله مره اخري'));
     }
@@ -82,10 +116,23 @@ class AuthRepoIml extends AuthRepo {
 
   @override
   Future<Either<Failures, UserEntity>> singInWithFacebooK() async {
+    User? user;
     try {
       var user = await firebaseAuthService.signInWithFacebook();
-      return right(UserModel.fromFirebaseUser(user));
+      var userEntity = UserModel.fromFirebaseUser(user);
+      await addUserData(user: userEntity);
+      var isUserExist = await databaseService.checkIfDataExists(
+        path: BackendEndpoint.isUserExists,
+        documentId: user.uid,
+      );
+      if (isUserExist) {
+        await getUserData(uid: user.uid);
+      } else {
+        await addUserData(user: userEntity);
+      }
+      return right(userEntity);
     } catch (e) {
+      await deletUser(user);
       log(
         'Expcption in AuthRepo. createUserWithEmailAndPrassword: ${e.toString} ',
       );
@@ -98,6 +145,16 @@ class AuthRepoIml extends AuthRepo {
     await databaseService.addData(
       path: BackendEndpoint.addUserData,
       data: user.toMap(),
+      documentId: user.uId,
     );
+  }
+
+  @override
+  Future<UserEntity> getUserData({required String uid}) async {
+    var userData = await databaseService.getData(
+      path: BackendEndpoint.getUserData,
+      docuemntId: uid,
+    );
+    return UserModel.fromJson(userData);
   }
 }
