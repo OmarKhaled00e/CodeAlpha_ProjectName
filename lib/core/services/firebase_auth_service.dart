@@ -6,6 +6,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:x/core/errors/exceptions.dart';
 
 class FirebaseAuthService {
+  Future deletUser() async {
+    await FirebaseAuth.instance.currentUser!.delete();
+  }
+
   Future<User> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -88,6 +92,8 @@ class FirebaseAuthService {
     final OAuthCredential facebookAuthCredential =
         FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
-    return (await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential)).user!;
+    return (await FirebaseAuth.instance.signInWithCredential(
+      facebookAuthCredential,
+    )).user!;
   }
 }
